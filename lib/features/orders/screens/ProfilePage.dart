@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../base/widget_utils.dart';
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -38,8 +40,12 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Profile"),
-        backgroundColor: Colors.indigo,
+        title: getCustomFont(" Profile ", 22, Colors.black, 2,
+            fontWeight: FontWeight.bold),
+        // const Text("📅 Daily Subscription Schedules"),
+        backgroundColor: Colors.white70,
+        // title: const Text("Profile"),
+        // backgroundColor: Colors.indigo,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

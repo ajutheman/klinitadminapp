@@ -370,6 +370,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../base/widget_utils.dart';
 import '../../../core/api_service.dart';
 import '../bloc/order_bloc.dart';
 import '../bloc/order_event.dart';
@@ -422,8 +423,11 @@ class _OrdersPageState extends State<OrdersPage> {
         BlocProvider.value(value: _employeeBloc),
       ],
       child: Scaffold(
-        appBar:
-            AppBar(title: const Text("Orders"), backgroundColor: Colors.indigo),
+        appBar: AppBar(
+          title: getCustomFont("  Orders  ", 22, Colors.black, 2,
+              fontWeight: FontWeight.bold),
+        ),
+        // AppBar(title: const Text("Orders"), backgroundColor: Colors.indigo),
         body: BlocBuilder<OrderBloc, OrderState>(
           builder: (context, state) {
             if (state is OrderInitial) {

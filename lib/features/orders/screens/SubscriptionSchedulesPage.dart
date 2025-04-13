@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import '../../../base/widget_utils.dart';
 import '../../../core/api_service.dart';
 import '../employ/employee_bloc.dart';
 import '../employee_repository.dart';
@@ -66,8 +67,10 @@ class _SubscriptionSchedulesPageState extends State<SubscriptionSchedulesPage>
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("📅 Daily Subscription Schedules"),
-          backgroundColor: Colors.deepPurple,
+          title: getCustomFont(" Subscription Schedules", 22, Colors.black, 2,
+              fontWeight: FontWeight.bold),
+          // const Text("📅 Daily Subscription Schedules"),
+          backgroundColor: Colors.white70,
           actions: [
             IconButton(
               icon: const Icon(Icons.calendar_month),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // import '../bloc/employee_bloc.dart';
+import '../../../base/widget_utils.dart';
 import '../../../core/api_service.dart';
 import '../employ/employee_bloc.dart';
 import '../employee_repository.dart';
@@ -18,8 +19,12 @@ class EmployeesPage extends StatelessWidget {
         ..add(LoadEmployees()),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Employees"),
-          backgroundColor: Colors.indigo,
+          title: getCustomFont(" Employees ", 22, Colors.black, 2,
+              fontWeight: FontWeight.bold),
+          // const Text("📅 Daily Subscription Schedules"),
+          backgroundColor: Colors.white70,
+          // title: const Text("Employees"),
+          // backgroundColor: Colors.indigo,
         ),
         body: BlocBuilder<EmployeeBloc, EmployeeState>(
           builder: (context, state) {

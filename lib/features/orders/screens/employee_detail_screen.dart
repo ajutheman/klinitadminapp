@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../base/widget_utils.dart';
 import '../models/employee_model.dart';
 
 class EmployeeDetailPage extends StatelessWidget {
@@ -11,8 +12,12 @@ class EmployeeDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(employee.name),
-        backgroundColor: Colors.indigo,
+        title: getCustomFont(employee.name, 22, Colors.black, 2,
+            fontWeight: FontWeight.bold),
+        // const Text("📅 Daily Subscription Schedules"),
+        backgroundColor: Colors.white70,
+        // title: Text(employee.name),
+        // backgroundColor: Colors.indigo,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

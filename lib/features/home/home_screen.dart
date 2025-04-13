@@ -112,9 +112,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<String> _icons = [
     "documnet.svg",
-    "documnet.svg",
-    "user.svg",
+    // "notification_unselected.svg",
     "review.svg",
+    // "documnet.svg",
+    "user.svg",
+    "user.svg",
+    // "review.svg",
   ];
 
   @override
