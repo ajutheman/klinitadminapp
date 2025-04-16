@@ -182,11 +182,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   getVerSpace(FetchPixels.getPixelHeight(40)),
-                  Center(
-                    child: getSvgImage("kleanit.svg",
-                        height: FetchPixels.getPixelHeight(100),
-                        width: FetchPixels.getPixelWidth(100)),
-                  ),
+                  // Center(
+                  //   child:
+                  //   // getSvgImage("kleanit.svg",
+                  //   //     height: FetchPixels.getPixelHeight(100),
+                  //   //     width: FetchPixels.getPixelWidth(100)),
+                  // ),
+                  getSvgImage("trace.svg",
+                      // getSvgImage("kleanit (1).svg",
+                      height: FetchPixels.getPixelHeight(124),
+                      width: FetchPixels.getPixelHeight(84.77)),
                   getVerSpace(FetchPixels.getPixelHeight(40)),
                   getCustomFont("Admin Login", 26, Colors.black, 1,
                       fontWeight: FontWeight.bold),
