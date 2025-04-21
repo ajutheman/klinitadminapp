@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Order {
   final int id;
   final String orderNumber;
@@ -6,6 +8,46 @@ class Order {
   final String paymentMethod;
   final String paymentStatus;
   final DateTime? createdAt;
+  final int? customerId;
+  final String? couponCode;
+  final double couponDiscount;
+  final String? referralCode;
+  final int referralBonusCoins;
+  final int? customerAddressId;
+  final int scheduledTimeId;
+  final int? bedrooms;
+  final bool petsPresent;
+  final int? beds;
+  final int? sofaBeds;
+  final bool withLinen;
+  final bool withSupplies;
+  final String? checkInTime;
+  final String? checkOutTime;
+  final int? occupancy;
+  final String? doorAccessCode;
+  final DateTime? bookingDate;
+  final double subtotal;
+  final double taxRate;
+  final double taxAmount;
+  // final double total;
+  // final String paymentMethod;
+  // final String paymentStatus;
+  // final String orderStatus;
+  final String? refundStatus;
+  final double? refundAmount;
+  final String? cancellationReason;
+  final String assignStatus;
+  final bool hasSubscription;
+  final int subscriptionDuration;
+  final String? notes;
+  final String? failedReason;
+  final String stripePaymentIntentId;
+  final String stripePaymentId;
+  final Map<String, dynamic>? paymentDetails;
+  // final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final String? deletedAt;
+  final String encryptedId;
 
   final Customer? customer;
   final Address? address;
@@ -16,11 +58,52 @@ class Order {
   Order({
     required this.id,
     required this.orderNumber,
+    this.customerId,
+    this.couponCode,
+    required this.couponDiscount,
+    this.referralCode,
+    required this.referralBonusCoins,
+    this.customerAddressId,
+    required this.scheduledTimeId,
+    this.bedrooms,
+    required this.petsPresent,
+    this.beds,
+    this.sofaBeds,
+    required this.withLinen,
+    required this.withSupplies,
+    this.checkInTime,
+    this.checkOutTime,
+    this.occupancy,
+    this.doorAccessCode,
+    this.bookingDate,
+    required this.subtotal,
+    required this.taxRate,
+    required this.taxAmount,
     required this.total,
-    required this.orderStatus,
     required this.paymentMethod,
     required this.paymentStatus,
-    required this.createdAt,
+    required this.orderStatus,
+    this.refundStatus,
+    this.refundAmount,
+    this.cancellationReason,
+    required this.assignStatus,
+    required this.hasSubscription,
+    required this.subscriptionDuration,
+    this.notes,
+    this.failedReason,
+    required this.stripePaymentIntentId,
+    required this.stripePaymentId,
+    this.paymentDetails,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+    required this.encryptedId,
+
+    // required this.total,
+    // required this.orderStatus,
+    // required this.paymentMethod,
+    // required this.paymentStatus,
+    // required this.createdAt,
     this.customer,
     this.address,
     required this.orderItems,
@@ -31,13 +114,63 @@ class Order {
     return Order(
       id: json['id'],
       orderNumber: json['order_number'] ?? '',
+      customerId: json['customer_id'],
+      couponCode: json['coupon_code'],
+      couponDiscount: double.tryParse(json['coupon_discount'] ?? '0') ?? 0,
+      referralCode: json['referral_code'],
+      referralBonusCoins: json['referral_bonus_coins'] ?? 0,
+      customerAddressId: json['customer_address_id'],
+      scheduledTimeId: json['scheduled_time_id'] ?? 0,
+      bedrooms: json['bedrooms'],
+      petsPresent: (json['pets_present'] as int?) == 1,
+      beds: json['beds'],
+      sofaBeds: json['sofa_beds'],
+      withLinen: (json['with_linen'] as int?) == 1,
+      withSupplies: (json['with_supplies'] as int?) == 1,
+      checkInTime: json['check_in_time'],
+      checkOutTime: json['check_out_time'],
+      occupancy: json['occupancy'],
+      doorAccessCode: json['door_access_code'],
+      bookingDate: json['booking_date'] != null
+          ? DateTime.tryParse(json['booking_date'])
+          : null,
+      subtotal: (json['subtotal'] as num).toDouble(),
+      taxRate: (json['tax_rate'] as num).toDouble(),
+      taxAmount: (json['tax_amount'] as num).toDouble(),
       total: (json['total'] as num).toDouble(),
-      orderStatus: json['order_status'] ?? '',
       paymentMethod: json['payment_method'] ?? '',
       paymentStatus: json['payment_status'] ?? '',
+      orderStatus: json['order_status'] ?? '',
+      refundStatus: json['refund_status'],
+      refundAmount: json['refund_amount'] != null
+          ? (json['refund_amount'] as num).toDouble()
+          : null,
+      cancellationReason: json['cancellation_reason'],
+      assignStatus: json['assign_status'] ?? 'no',
+      hasSubscription: json['has_subscription'] as bool? ?? false,
+      subscriptionDuration: json['subscription_duration'] ?? 0,
+      notes: json['notes'],
+      failedReason: json['failed_reason'],
+      stripePaymentIntentId: json['stripe_payment_intent_id'] ?? '',
+      stripePaymentId: json['stripe_payment_id'] ?? '',
+      paymentDetails: json['payment_details'] != null
+          ? jsonDecode(json['payment_details'])
+          : null,
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'])
           : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
+      deletedAt: json['deleted_at'],
+      encryptedId: json['encrypted_id'] ?? '',
+      // total: (json['total'] as num).toDouble(),
+      // orderStatus: json['order_status'] ?? '',
+      // paymentMethod: json['payment_method'] ?? '',
+      // paymentStatus: json['payment_status'] ?? '',
+      // createdAt: json['created_at'] != null
+      //     ? DateTime.tryParse(json['created_at'])
+      //     : null,
       customer:
           json['customer'] != null ? Customer.fromJson(json['customer']) : null,
       address:
@@ -54,27 +187,44 @@ class Order {
   }
 }
 
+//
 class WorkAssignment {
   final int id;
   final int orderId;
   final int employeeId;
   final String workStatus;
-  final Employee employee;
+  final Employee employee;final DateTime? startTime;
+  final DateTime? endTime;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final String encryptedId;
 
   WorkAssignment({
     required this.id,
     required this.orderId,
     required this.employeeId,
     required this.workStatus,
-    required this.employee,
+    required this.employee,this.startTime,
+    this.endTime,
+    this.createdAt,
+    this.updatedAt,
+    required this.encryptedId,
   });
 
   factory WorkAssignment.fromJson(Map<String, dynamic> json) {
+    DateTime? parseNullable(String? s) =>
+        s != null ? DateTime.tryParse(s) : null;
+
     return WorkAssignment(
       id: json['id'],
       orderId: json['order_id'],
       employeeId: json['employee_id'],
       workStatus: json['work_status'] ?? '',
+      startTime: parseNullable(json['start_time'] as String?),
+      endTime: parseNullable(json['end_time'] as String?),
+      createdAt: parseNullable(json['created_at'] as String?),
+      updatedAt: parseNullable(json['updated_at'] as String?),
+      encryptedId: json['encrypted_id'] as String? ?? '',
       employee: Employee.fromJson(json['employee']),
     );
   }

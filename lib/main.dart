@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
   // final bool isLoggedIn;
   // const MyApp({Key? key, required this.isLoggedIn}) : super(key: key);
   final String initialRoute;
+
   const MyApp({super.key, required this.initialRoute});
 
   @override
