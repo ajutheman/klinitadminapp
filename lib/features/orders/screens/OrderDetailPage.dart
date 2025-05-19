@@ -498,7 +498,408 @@
 //   );
 // }
 
-// lib/pages/order_detail_page.dart
+// // lib/pages/order_detail_page.dart
+// import 'dart:convert';
+//
+// import 'package:flutter/material.dart';
+// import 'package:intl/intl.dart';
+//
+// import '../models/order_model.dart';
+//
+// class OrderDetailPage extends StatelessWidget {
+//   final Order order;
+//
+//   const OrderDetailPage({super.key, required this.order});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     // Gather each section into a list
+//     final sections = <Widget>[
+//       _animatedCard(
+//         _section(
+//           title: 'Basic Info',
+//           children: [
+//             _infoRow(Icons.confirmation_num, 'ID: ${order.id}'),
+//             _infoRow(Icons.event, 'Scheduled ID: ${order.scheduledTimeId}'),
+//             if (order.bookingDate != null)
+//               _infoRow(
+//                 Icons.book_online,
+//                 'Booking Date: ${DateFormat.yMMMd().format(order.bookingDate!)}',
+//               ),
+//             _infoRow(Icons.info, 'Status: ${order.orderStatus}'),
+//             if (order.assignStatus.isNotEmpty)
+//               _infoRow(Icons.group, 'Assign Status: ${order.assignStatus}'),
+//           ],
+//         ),
+//       ),
+//
+//       _animatedCard(
+//         _section(
+//           title: 'Customer Details',
+//           children: [
+//             _infoRow(Icons.person, order.customer?.name ?? '-'),
+//             _infoRow(Icons.phone, order.customer?.mobile ?? '-'),
+//             _infoRow(Icons.email, order.customer?.email ?? '-'),
+//             if (order.referralCode?.isNotEmpty ?? false)
+//               _infoRow(
+//                   Icons.redeem,
+//                   'Referral: ${order.referralCode} '
+//                       '(+${order.referralBonusCoins} coins)'),
+//           ],
+//         ),
+//       ),
+//
+//       _animatedCard(
+//         _section(
+//           title: 'Address',
+//           children: [
+//             _infoRow(Icons.location_on,
+//                 '${order.address?.buildingName}, ${order.address?.area}'),
+//           ],
+//         ),
+//       ),
+//
+//       _animatedCard(
+//         _section(
+//           title: 'Payment & Pricing',
+//           children: [
+//             _infoRow(Icons.payment,
+//                 '${order.paymentMethod.toUpperCase()} — ${order.paymentStatus.toUpperCase()}'),
+//             _infoRow(Icons.attach_money,
+//                 'Subtotal: AED ${order.subtotal.toStringAsFixed(2)}'),
+//             _infoRow(Icons.percent,
+//                 'Tax (${order.taxRate.toStringAsFixed(1)}%): AED ${order.taxAmount.toStringAsFixed(2)}'),
+//             if (order.couponCode?.isNotEmpty ?? false)
+//               _infoRow(Icons.card_giftcard,
+//                   'Coupon ${order.couponCode}: -AED ${order.couponDiscount.toStringAsFixed(2)}'),
+//             _infoRow(Icons.money,
+//                 'Total: AED ${order.total.toStringAsFixed(2)}'),
+//             if (order.refundStatus != null)
+//               _infoRow(Icons.refresh,
+//                   'Refund: ${order.refundStatus} — AED ${order.refundAmount?.toStringAsFixed(2) ?? "0.00"}'),
+//             if (order.cancellationReason != null)
+//               _infoRow(Icons.cancel,
+//                   'Cancelled because: ${order.cancellationReason}'),
+//             const SizedBox(height: 8),
+//             TextButton.icon(
+//               onPressed: () => _showPaymentDetailsBottomSheet(
+//                   context, order.paymentDetails!),
+//               icon: const Icon(Icons.info_outline, size: 18),
+//               label: const Text('View payment details'),
+//             ),
+//           ],
+//         ),
+//       ),
+//
+//       _animatedCard(
+//         _section(
+//           title: 'Subscription',
+//           children: [
+//             _infoRow(
+//                 Icons.repeat,
+//                 order.hasSubscription
+//                     ? 'Every ${order.subscriptionDuration} month(s)'
+//                     : 'None'),
+//           ],
+//         ),
+//       ),
+//
+//       _animatedCard(
+//         _section(
+//           title: 'Preferences',
+//           children: [
+//             _infoRow(Icons.bedroom_parent_outlined,
+//                 'Bedrooms: ${order.bedrooms ?? '-'}'),
+//             _infoRow(Icons.pets,
+//                 'Pets Present: ${order.petsPresent ? order.petsPresent : 'None'}'),
+//             _infoRow(Icons.bed, 'Beds: ${order.beds ?? '-'}'),
+//             _infoRow(Icons.weekend, 'Sofa Beds: ${order.sofaBeds ?? '-'}'),
+//             _infoRow(Icons.label_outline_sharp,
+//                 'With Linen: ${order.withLinen == 1 ? 'Yes' : 'No'}'),
+//             _infoRow(Icons.shopping_bag,
+//                 'With Supplies: ${order.withSupplies == 1 ? 'Yes' : 'No'}'),
+//             _infoRow(Icons.door_front_door,
+//                 'Door Access Code: ${order.doorAccessCode ?? '-'}'),
+//             _infoRow(Icons.people, 'Occupancy: ${order.occupancy ?? '-'}'),
+//           ],
+//         ),
+//       ),
+//
+//       _animatedCard(
+//         _section(
+//           title: 'Time & Date',
+//           children: [
+//             _infoRow(
+//               Icons.access_time,
+//               'Check-in: ${order.checkInTime != null ? DateFormat.jm().format(order.checkInTime! as DateTime) : '-'}',
+//             ),
+//             _infoRow(
+//               Icons.access_time_outlined,
+//               'Check-out: ${order.checkOutTime != null ? DateFormat.jm().format(order.checkOutTime! as DateTime) : '-'}',
+//             ),
+//             if (order.bookingDate != null)
+//               _infoRow(Icons.book_online,
+//                   'Booking Date: ${DateFormat.yMMMd().format(order.bookingDate!)}'),
+//           ],
+//         ),
+//       ),
+//
+//       _animatedCard(
+//         _section(
+//           title: 'Coupon & Referral',
+//           children: [
+//             _infoRow(Icons.local_offer,
+//                 'Coupon Code: ${order.couponCode ?? '-'}'),
+//             _infoRow(Icons.money_off,
+//                 'Coupon Discount: AED ${order.couponDiscount.toStringAsFixed(2)}'),
+//             _infoRow(Icons.redeem,
+//                 'Referral Code: ${order.referralCode ?? '-'}'),
+//             _infoRow(Icons.stars,
+//                 'Referral Bonus: ${order.referralBonusCoins} coins'),
+//           ],
+//         ),
+//       ),
+//
+//       _animatedCard(
+//         _section(
+//           title: 'Order Meta',
+//           children: [
+//             _infoRow(Icons.home_work,
+//                 'Customer Address ID: ${order.customerAddressId}'),
+//             _infoRow(Icons.schedule,
+//                 'Scheduled Time ID: ${order.scheduledTimeId}'),
+//           ],
+//         ),
+//       ),
+//
+//       if (order.notes?.isNotEmpty ?? false)
+//         _animatedCard(
+//           _section(
+//             title: 'Notes',
+//             children: [
+//               Text(order.notes!,
+//                   style: const TextStyle(
+//                       fontSize: 14, fontStyle: FontStyle.italic)),
+//             ],
+//           ),
+//         ),
+//
+//       if (order.orderItems.isNotEmpty)
+//         _animatedCard(
+//           _section(
+//             title: 'Items',
+//             children: order.orderItems.map((item) {
+//               return ListTile(
+//                 contentPadding: EdgeInsets.zero,
+//                 leading: CircleAvatar(
+//                   backgroundImage:
+//                   NetworkImage(item.thirdCategory?.image ?? ''),
+//                   backgroundColor: Colors.grey[200],
+//                 ),
+//                 title: Text(item.thirdCategory?.name ?? 'Service',
+//                     style: const TextStyle(fontWeight: FontWeight.bold)),
+//                 subtitle: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Text("× ${item.employeeCount}"),
+//                     if (item.subscriptionFrequency != null)
+//                       Text("Frequency: ${item.subscriptionFrequency} per week"),
+//                     Text(
+//                         "Item Total: AED ${item.itemTotal.toStringAsFixed(2)}"),
+//                   ],
+//                 ),
+//               );
+//             }).toList(),
+//           ),
+//         ),
+//
+//       _animatedCard(
+//         _section(
+//           title: 'Assigned Employees',
+//           children: order.workAssignments.isEmpty
+//               ? [
+//             const Text("No employees assigned.",
+//                 style: TextStyle(color: Colors.grey)),
+//           ]
+//               : order.workAssignments.map((assign) {
+//             return ListTile(
+//               contentPadding: EdgeInsets.zero,
+//               leading: CircleAvatar(
+//                 backgroundImage: NetworkImage(assign.employee.image),
+//               ),
+//               title: Text(assign.employee.name),
+//               subtitle: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text("Status: ${assign.workStatus}"),
+//                   if (assign.startTime != null)
+//                     Text(
+//                         "Start: ${DateFormat.jm().format(assign.startTime!)}"),
+//                   if (assign.endTime != null)
+//                     Text(
+//                         "End:   ${DateFormat.jm().format(assign.endTime!)}"),
+//                 ],
+//               ),
+//             );
+//           }).toList(),
+//         ),
+//       ),
+//     ];
+//
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Order #${order.orderNumber}'),
+//         backgroundColor: Colors.indigo,
+//       ),
+//       body: ListView.separated(
+//         padding: const EdgeInsets.all(16),
+//         itemCount: sections.length,
+//         separatorBuilder: (_, __) => const SizedBox(height: 12),
+//         itemBuilder: (_, idx) => sections[idx],
+//       ),
+//     );
+//   }
+//
+//   /// Wraps each section card in a subtle scale animation
+//   Widget _animatedCard(Widget child) {
+//     return TweenAnimationBuilder<double>(
+//       tween: Tween(begin: 0.95, end: 1.0),
+//       duration: const Duration(milliseconds: 300),
+//       builder: (_, value, widget) => Transform.scale(scale: value, child: widget),
+//       child: child,
+//     );
+//   }
+//
+//   /// Creates a rounded card with a colored side border and an accent header
+//   Widget _section({required String title, required List<Widget> children}) {
+//     return Card(
+//       shape: RoundedRectangleBorder(
+//         side: BorderSide(color: Colors.indigo.shade300, width: 3),
+//         borderRadius: BorderRadius.circular(12),
+//       ),
+//       elevation: 4,
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.stretch,
+//         children: [
+//           // accent header
+//           Container(
+//             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+//             decoration: BoxDecoration(
+//               color: Colors.indigo.shade50,
+//               borderRadius:
+//               const BorderRadius.vertical(top: Radius.circular(9)),
+//             ),
+//             child: Text(title,
+//                 style: TextStyle(
+//                     color: Colors.indigo.shade800,
+//                     fontSize: 16,
+//                     fontWeight: FontWeight.bold)),
+//           ),
+//           Padding(
+//             padding: const EdgeInsets.all(16),
+//             child: Column(children: children),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   /// A row with a circular icon background
+//   Widget _infoRow(IconData icon, String text) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 6),
+//       child: Row(children: [
+//         Container(
+//           padding: const EdgeInsets.all(8),
+//           decoration: BoxDecoration(
+//             color: Colors.indigo.shade100,
+//             shape: BoxShape.circle,
+//           ),
+//           child: Icon(icon, size: 20, color: Colors.indigo),
+//         ),
+//         const SizedBox(width: 12),
+//         Expanded(child: Text(text, style: const TextStyle(fontSize: 14))),
+//       ]),
+//     );
+//   }
+//
+//   /// Bottom sheet summarizing key payment fields, with option to view raw JSON
+//   void _showPaymentDetailsBottomSheet(
+//       BuildContext context, Map<String, dynamic> d) {
+//     final simple = <String, String>{
+//       'Payment ID': d['id']?.toString() ?? '-',
+//       'Status': d['status']?.toString() ?? '-',
+//       'Amount': d['amount_received'] != null
+//           ? 'AED ${(d['amount_received'] as num).toStringAsFixed(2)}'
+//           : '-',
+//       'Currency': d['currency']?.toString().toUpperCase() ?? '-',
+//       'Method': (d['payment_method_types'] as List<dynamic>?)
+//           ?.join(', ')
+//           .toUpperCase() ??
+//           '-',
+//       'Description': d['description']?.toString() ?? '-',
+//       'Created': d['created'] != null
+//           ? DateFormat.yMMMd().add_jm().format(
+//           DateTime.fromMillisecondsSinceEpoch((d['created'] as int) * 1000))
+//           : '-',
+//     };
+//
+//     showModalBottomSheet(
+//       context: context,
+//       isScrollControlled: true,
+//       backgroundColor: Colors.white.withOpacity(0.95),
+//       shape: const RoundedRectangleBorder(
+//           borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+//       builder: (_) => Padding(
+//         padding: const EdgeInsets.all(16),
+//         child: Column(mainAxisSize: MainAxisSize.min, children: [
+//           Text('Payment Details',
+//               style: Theme.of(context).textTheme.titleLarge),
+//           const SizedBox(height: 12),
+//           ...simple.entries.map((e) => ListTile(
+//             dense: true,
+//             contentPadding: EdgeInsets.zero,
+//             title:
+//             Text(e.key, style: const TextStyle(fontWeight: FontWeight.bold)),
+//             subtitle: Text(e.value),
+//           )),
+//           const Divider(),
+//           TextButton.icon(
+//             onPressed: () {
+//               Navigator.pop(context);
+//               _showRawJsonDialog(context, d);
+//             },
+//             icon: const Icon(Icons.code, size: 18),
+//             label: const Text('View full JSON'),
+//           ),
+//           const SizedBox(height: 8),
+//         ]),
+//       ),
+//     );
+//   }
+//
+//   /// Plain dialog showing the full JSON payload
+//   void _showRawJsonDialog(
+//       BuildContext context, Map<String, dynamic> details) {
+//     showDialog(
+//       context: context,
+//       builder: (_) => AlertDialog(
+//         title: const Text('Full Payment JSON'),
+//         content: SingleChildScrollView(
+//           child: Text(
+//             const JsonEncoder.withIndent('  ').convert(details),
+//             style: const TextStyle(fontFamily: 'Courier', fontSize: 12),
+//           ),
+//         ),
+//         actions: [
+//           TextButton(
+//               onPressed: () => Navigator.pop(context), child: const Text('Close'))
+//         ],
+//       ),
+//     );
+//   }
+// }
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -513,79 +914,109 @@ class OrderDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Gather each section into a list
+    final theme = Theme.of(context);
     final sections = <Widget>[
       _animatedCard(
         _section(
+          context,
           title: 'Basic Info',
           children: [
-            _infoRow(Icons.confirmation_num, 'ID: ${order.id}'),
-            _infoRow(Icons.event, 'Scheduled ID: ${order.scheduledTimeId}'),
+            _infoRow(theme, Icons.confirmation_num, 'ID: ${order.id}'),
+            _infoRow(theme, Icons.event, 'Scheduled ID: ${order.scheduledTimeId}'),
             if (order.bookingDate != null)
               _infoRow(
+                theme,
                 Icons.book_online,
                 'Booking Date: ${DateFormat.yMMMd().format(order.bookingDate!)}',
               ),
-            _infoRow(Icons.info, 'Status: ${order.orderStatus}'),
+            _infoRow(theme, Icons.info, 'Status: ${order.orderStatus}'),
             if (order.assignStatus.isNotEmpty)
-              _infoRow(Icons.group, 'Assign Status: ${order.assignStatus}'),
+              _infoRow(theme, Icons.group, 'Assign Status: ${order.assignStatus}'),
           ],
         ),
       ),
 
       _animatedCard(
         _section(
+          context,
           title: 'Customer Details',
           children: [
-            _infoRow(Icons.person, order.customer?.name ?? '-'),
-            _infoRow(Icons.phone, order.customer?.mobile ?? '-'),
-            _infoRow(Icons.email, order.customer?.email ?? '-'),
-            if (order.referralCode?.isNotEmpty ?? false)
+            _infoRow(theme, Icons.person, order.customer?.name ?? '-'),
+            _infoRow(theme, Icons.phone, order.customer?.mobile ?? '-'),
+            _infoRow(theme, Icons.email, order.customer?.email ?? '-'),
+            if ((order.referralCode ?? '').isNotEmpty)
               _infoRow(
-                  Icons.redeem,
-                  'Referral: ${order.referralCode} '
-                      '(+${order.referralBonusCoins} coins)'),
+                theme,
+                Icons.redeem,
+                'Referral: ${order.referralCode} (+${order.referralBonusCoins} coins)',
+              ),
           ],
         ),
       ),
 
       _animatedCard(
         _section(
+          context,
           title: 'Address',
           children: [
-            _infoRow(Icons.location_on,
-                '${order.address?.buildingName}, ${order.address?.area}'),
+            _infoRow(
+              theme,
+              Icons.location_on,
+              '${order.address?.buildingName}, ${order.address?.area}',
+            ),
           ],
         ),
       ),
 
       _animatedCard(
         _section(
+          context,
           title: 'Payment & Pricing',
           children: [
-            _infoRow(Icons.payment,
-                '${order.paymentMethod.toUpperCase()} — ${order.paymentStatus.toUpperCase()}'),
-            _infoRow(Icons.attach_money,
-                'Subtotal: AED ${order.subtotal.toStringAsFixed(2)}'),
-            _infoRow(Icons.percent,
-                'Tax (${order.taxRate.toStringAsFixed(1)}%): AED ${order.taxAmount.toStringAsFixed(2)}'),
-            if (order.couponCode?.isNotEmpty ?? false)
-              _infoRow(Icons.card_giftcard,
-                  'Coupon ${order.couponCode}: -AED ${order.couponDiscount.toStringAsFixed(2)}'),
-            _infoRow(Icons.money,
-                'Total: AED ${order.total.toStringAsFixed(2)}'),
+            _infoRow(
+              theme,
+              Icons.payment,
+              '${order.paymentMethod.toUpperCase()} — ${order.paymentStatus.toUpperCase()}',
+            ),
+            _infoRow(
+              theme,
+              Icons.attach_money,
+              'Subtotal: AED ${order.subtotal.toStringAsFixed(2)}',
+            ),
+            _infoRow(
+              theme,
+              Icons.percent,
+              'Tax (${order.taxRate.toStringAsFixed(1)}%): AED ${order.taxAmount.toStringAsFixed(2)}',
+            ),
+            if ((order.couponCode ?? '').isNotEmpty)
+              _infoRow(
+                theme,
+                Icons.card_giftcard,
+                'Coupon ${order.couponCode}: -AED ${order.couponDiscount.toStringAsFixed(2)}',
+              ),
+            _infoRow(
+              theme,
+              Icons.money,
+              'Total: AED ${order.total.toStringAsFixed(2)}',
+            ),
             if (order.refundStatus != null)
-              _infoRow(Icons.refresh,
-                  'Refund: ${order.refundStatus} — AED ${order.refundAmount?.toStringAsFixed(2) ?? "0.00"}'),
+              _infoRow(
+                theme,
+                Icons.refresh,
+                'Refund: ${order.refundStatus} — AED ${order.refundAmount?.toStringAsFixed(2) ?? "0.00"}',
+              ),
             if (order.cancellationReason != null)
-              _infoRow(Icons.cancel,
-                  'Cancelled because: ${order.cancellationReason}'),
+              _infoRow(
+                theme,
+                Icons.cancel,
+                'Cancelled: ${order.cancellationReason}',
+              ),
             const SizedBox(height: 8),
             TextButton.icon(
               onPressed: () => _showPaymentDetailsBottomSheet(
                   context, order.paymentDetails!),
-              icon: const Icon(Icons.info_outline, size: 18),
-              label: const Text('View payment details'),
+              icon: Icon(Icons.info_outline, size: 18, color: theme.colorScheme.secondary),
+              label: Text('View payment details', style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.secondary)),
             ),
           ],
         ),
@@ -593,93 +1024,105 @@ class OrderDetailPage extends StatelessWidget {
 
       _animatedCard(
         _section(
+          context,
           title: 'Subscription',
           children: [
             _infoRow(
-                Icons.repeat,
-                order.hasSubscription
-                    ? 'Every ${order.subscriptionDuration} month(s)'
-                    : 'None'),
+              theme,
+              Icons.repeat,
+              order.hasSubscription
+                  ? 'Every ${order.subscriptionDuration} month(s)'
+                  : 'None',
+            ),
           ],
         ),
       ),
 
       _animatedCard(
         _section(
+          context,
           title: 'Preferences',
           children: [
-            _infoRow(Icons.bedroom_parent_outlined,
-                'Bedrooms: ${order.bedrooms ?? '-'}'),
-            _infoRow(Icons.pets,
-                'Pets Present: ${order.petsPresent ? order.petsPresent : 'None'}'),
-            _infoRow(Icons.bed, 'Beds: ${order.beds ?? '-'}'),
-            _infoRow(Icons.weekend, 'Sofa Beds: ${order.sofaBeds ?? '-'}'),
-            _infoRow(Icons.label_outline_sharp,
+            _infoRow(theme, Icons.bedroom_parent_outlined, 'Bedrooms: ${order.bedrooms ?? '-'}'),
+            _infoRow(theme, Icons.pets, 'Pets Present: ${order.petsPresent ? 'Yes' : 'No'}'),
+            _infoRow(theme, Icons.bed, 'Beds: ${order.beds ?? '-'}'),
+            _infoRow(theme, Icons.weekend, 'Sofa Beds: ${order.sofaBeds ?? '-'}'),
+            _infoRow(theme, Icons.label_outline_sharp,
                 'With Linen: ${order.withLinen == 1 ? 'Yes' : 'No'}'),
-            _infoRow(Icons.shopping_bag,
+            _infoRow(theme, Icons.shopping_bag,
                 'With Supplies: ${order.withSupplies == 1 ? 'Yes' : 'No'}'),
-            _infoRow(Icons.door_front_door,
-                'Door Access Code: ${order.doorAccessCode ?? '-'}'),
-            _infoRow(Icons.people, 'Occupancy: ${order.occupancy ?? '-'}'),
+            _infoRow(theme, Icons.door_front_door,
+                'Door Access: ${order.doorAccessCode ?? '-'}'),
+            _infoRow(theme, Icons.people, 'Occupancy: ${order.occupancy ?? '-'}'),
           ],
         ),
       ),
 
       _animatedCard(
         _section(
+          context,
           title: 'Time & Date',
           children: [
             _infoRow(
+              theme,
               Icons.access_time,
-              'Check-in: ${order.checkInTime != null ? DateFormat.jm().format(order.checkInTime! as DateTime) : '-'}',
+              'Check‑in: ${order.checkInTime != null ? DateFormat.jm().format(order.checkInTime! as DateTime) : '-'}',
             ),
             _infoRow(
+              theme,
               Icons.access_time_outlined,
-              'Check-out: ${order.checkOutTime != null ? DateFormat.jm().format(order.checkOutTime! as DateTime) : '-'}',
+              'Check‑out: ${order.checkOutTime != null ? DateFormat.jm().format(order.checkOutTime! as DateTime) : '-'}',
             ),
+            _infoRow(
+              theme, Icons.access_time,
+              'Check-in: ${order.checkInTime != null
+                  ? DateFormat.jm().format(order.checkInTime!)
+                  : '-'}',
+            ),
+
             if (order.bookingDate != null)
-              _infoRow(Icons.book_online,
-                  'Booking Date: ${DateFormat.yMMMd().format(order.bookingDate!)}'),
+              _infoRow(
+                theme,
+                Icons.book_online,
+                'Booking Date: ${DateFormat.yMMMd().format(order.bookingDate!)}',
+              ),
           ],
         ),
       ),
 
       _animatedCard(
         _section(
+          context,
           title: 'Coupon & Referral',
           children: [
-            _infoRow(Icons.local_offer,
-                'Coupon Code: ${order.couponCode ?? '-'}'),
-            _infoRow(Icons.money_off,
+            _infoRow(theme, Icons.local_offer, 'Coupon Code: ${order.couponCode ?? '-'}'),
+            _infoRow(theme, Icons.money_off,
                 'Coupon Discount: AED ${order.couponDiscount.toStringAsFixed(2)}'),
-            _infoRow(Icons.redeem,
-                'Referral Code: ${order.referralCode ?? '-'}'),
-            _infoRow(Icons.stars,
-                'Referral Bonus: ${order.referralBonusCoins} coins'),
+            _infoRow(theme, Icons.redeem, 'Referral Code: ${order.referralCode ?? '-'}'),
+            _infoRow(theme, Icons.stars, 'Referral Bonus: ${order.referralBonusCoins} coins'),
           ],
         ),
       ),
 
       _animatedCard(
         _section(
+          context,
           title: 'Order Meta',
           children: [
-            _infoRow(Icons.home_work,
-                'Customer Address ID: ${order.customerAddressId}'),
-            _infoRow(Icons.schedule,
-                'Scheduled Time ID: ${order.scheduledTimeId}'),
+            _infoRow(theme, Icons.home_work, 'Customer Addr ID: ${order.customerAddressId}'),
+            _infoRow(theme, Icons.schedule, 'Schedule ID: ${order.scheduledTimeId}'),
           ],
         ),
       ),
 
-      if (order.notes?.isNotEmpty ?? false)
+      if ((order.notes ?? '').isNotEmpty)
         _animatedCard(
           _section(
+            context,
             title: 'Notes',
             children: [
               Text(order.notes!,
-                  style: const TextStyle(
-                      fontSize: 14, fontStyle: FontStyle.italic)),
+                  style: theme.textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic)),
             ],
           ),
         ),
@@ -687,25 +1130,25 @@ class OrderDetailPage extends StatelessWidget {
       if (order.orderItems.isNotEmpty)
         _animatedCard(
           _section(
+            context,
             title: 'Items',
             children: order.orderItems.map((item) {
               return ListTile(
                 contentPadding: EdgeInsets.zero,
                 leading: CircleAvatar(
-                  backgroundImage:
-                  NetworkImage(item.thirdCategory?.image ?? ''),
-                  backgroundColor: Colors.grey[200],
+                  backgroundImage: NetworkImage(item.thirdCategory?.image ?? ''),
+                  backgroundColor: theme.cardColor,
                 ),
                 title: Text(item.thirdCategory?.name ?? 'Service',
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                    style: theme.textTheme.titleMedium),
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("× ${item.employeeCount}"),
+                    Text("× ${item.employeeCount}", style: theme.textTheme.bodyMedium),
                     if (item.subscriptionFrequency != null)
-                      Text("Frequency: ${item.subscriptionFrequency} per week"),
-                    Text(
-                        "Item Total: AED ${item.itemTotal.toStringAsFixed(2)}"),
+                      Text("Freq: ${item.subscriptionFrequency}/wk", style: theme.textTheme.bodyMedium),
+                    Text("Total: AED ${item.itemTotal.toStringAsFixed(2)}",
+                        style: theme.textTheme.bodyMedium),
                   ],
                 ),
               );
@@ -715,29 +1158,25 @@ class OrderDetailPage extends StatelessWidget {
 
       _animatedCard(
         _section(
+          context,
           title: 'Assigned Employees',
           children: order.workAssignments.isEmpty
-              ? [
-            const Text("No employees assigned.",
-                style: TextStyle(color: Colors.grey)),
-          ]
+              ? [ Text("No employees assigned.", style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.error)) ]
               : order.workAssignments.map((assign) {
             return ListTile(
               contentPadding: EdgeInsets.zero,
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(assign.employee.image),
-              ),
-              title: Text(assign.employee.name),
+              leading: CircleAvatar(backgroundImage: NetworkImage(assign.employee.image)),
+              title: Text(assign.employee.name, style: theme.textTheme.bodyMedium),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Status: ${assign.workStatus}"),
+                  Text("Status: ${assign.workStatus}", style: theme.textTheme.bodyMedium),
                   if (assign.startTime != null)
-                    Text(
-                        "Start: ${DateFormat.jm().format(assign.startTime!)}"),
+                    Text("Start: ${DateFormat.jm().format(assign.startTime!)}",
+                        style: theme.textTheme.bodyMedium),
                   if (assign.endTime != null)
-                    Text(
-                        "End:   ${DateFormat.jm().format(assign.endTime!)}"),
+                    Text("End:   ${DateFormat.jm().format(assign.endTime!)}",
+                        style: theme.textTheme.bodyMedium),
                 ],
               ),
             );
@@ -748,8 +1187,8 @@ class OrderDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Order #${order.orderNumber}'),
-        backgroundColor: Colors.indigo,
+        backgroundColor: theme.primaryColor,
+        title: Text('Order #${order.orderNumber}', style: theme.textTheme.headlineSmall),
       ),
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
@@ -760,7 +1199,6 @@ class OrderDetailPage extends StatelessWidget {
     );
   }
 
-  /// Wraps each section card in a subtle scale animation
   Widget _animatedCard(Widget child) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.95, end: 1.0),
@@ -770,30 +1208,29 @@ class OrderDetailPage extends StatelessWidget {
     );
   }
 
-  /// Creates a rounded card with a colored side border and an accent header
-  Widget _section({required String title, required List<Widget> children}) {
+  Widget _section(
+      BuildContext context, {
+        required String title,
+        required List<Widget> children,
+      }) {
+    final theme = Theme.of(context);
     return Card(
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: Colors.indigo.shade300, width: 3),
+        side: BorderSide(color: theme.primaryColor.withOpacity(0.5), width: 3),
         borderRadius: BorderRadius.circular(12),
       ),
       elevation: 4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // accent header
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             decoration: BoxDecoration(
-              color: Colors.indigo.shade50,
-              borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(9)),
+              color: theme.primaryColor.withOpacity(0.1),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(9)),
             ),
             child: Text(title,
-                style: TextStyle(
-                    color: Colors.indigo.shade800,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold)),
+                style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.secondary)),
           ),
           Padding(
             padding: const EdgeInsets.all(16),
@@ -804,28 +1241,27 @@ class OrderDetailPage extends StatelessWidget {
     );
   }
 
-  /// A row with a circular icon background
-  Widget _infoRow(IconData icon, String text) {
+  Widget _infoRow(ThemeData theme, IconData icon, String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(children: [
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.indigo.shade100,
+            color: theme.primaryColor.withOpacity(0.2),
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, size: 20, color: Colors.indigo),
+          child: Icon(icon, size: 20, color: theme.colorScheme.secondary),
         ),
         const SizedBox(width: 12),
-        Expanded(child: Text(text, style: const TextStyle(fontSize: 14))),
+        Expanded(child: Text(text, style: theme.textTheme.bodyMedium)),
       ]),
     );
   }
 
-  /// Bottom sheet summarizing key payment fields, with option to view raw JSON
   void _showPaymentDetailsBottomSheet(
       BuildContext context, Map<String, dynamic> d) {
+    final theme = Theme.of(context);
     final simple = <String, String>{
       'Payment ID': d['id']?.toString() ?? '-',
       'Status': d['status']?.toString() ?? '-',
@@ -837,40 +1273,39 @@ class OrderDetailPage extends StatelessWidget {
           ?.join(', ')
           .toUpperCase() ??
           '-',
-      'Description': d['description']?.toString() ?? '-',
       'Created': d['created'] != null
-          ? DateFormat.yMMMd().add_jm().format(
-          DateTime.fromMillisecondsSinceEpoch((d['created'] as int) * 1000))
+          ? DateFormat.yMMMd()
+          .add_jm()
+          .format(DateTime.fromMillisecondsSinceEpoch((d['created'] as int) * 1000))
           : '-',
     };
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white.withOpacity(0.95),
+      backgroundColor: theme.dialogBackgroundColor.withOpacity(0.95),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (_) => Padding(
         padding: const EdgeInsets.all(16),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Text('Payment Details',
-              style: Theme.of(context).textTheme.titleLarge),
+          Text('Payment Details', style: theme.textTheme.headlineSmall),
           const SizedBox(height: 12),
           ...simple.entries.map((e) => ListTile(
             dense: true,
             contentPadding: EdgeInsets.zero,
-            title:
-            Text(e.key, style: const TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text(e.value),
+            title: Text(e.key, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold)),
+            subtitle: Text(e.value, style: theme.textTheme.bodyMedium),
           )),
-          const Divider(),
+          Divider(color: theme.dividerColor),
           TextButton.icon(
             onPressed: () {
               Navigator.pop(context);
               _showRawJsonDialog(context, d);
             },
-            icon: const Icon(Icons.code, size: 18),
-            label: const Text('View full JSON'),
+            icon: Icon(Icons.code, size: 18, color: theme.colorScheme.secondary),
+            label: Text('View full JSON',
+                style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.secondary)),
           ),
           const SizedBox(height: 8),
         ]),
@@ -878,22 +1313,24 @@ class OrderDetailPage extends StatelessWidget {
     );
   }
 
-  /// Plain dialog showing the full JSON payload
-  void _showRawJsonDialog(
-      BuildContext context, Map<String, dynamic> details) {
+  void _showRawJsonDialog(BuildContext context, Map<String, dynamic> details) {
+    final theme = Theme.of(context);
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Full Payment JSON'),
+        backgroundColor: theme.dialogBackgroundColor,
+        title: Text('Full Payment JSON', style: theme.textTheme.titleMedium),
         content: SingleChildScrollView(
           child: Text(
             const JsonEncoder.withIndent('  ').convert(details),
-            style: const TextStyle(fontFamily: 'Courier', fontSize: 12),
+            style: theme.textTheme.bodyMedium?.copyWith(fontFamily: 'Courier', fontSize: 12),
           ),
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context), child: const Text('Close'))
+            onPressed: () => Navigator.pop(context),
+            child: Text('Close', style: theme.textTheme.labelLarge),
+          )
         ],
       ),
     );

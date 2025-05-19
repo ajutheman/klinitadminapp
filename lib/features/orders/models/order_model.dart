@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 class Order {
   final int id;
   final String orderNumber;
@@ -21,8 +23,11 @@ class Order {
   final int? sofaBeds;
   final bool withLinen;
   final bool withSupplies;
-  final String? checkInTime;
-  final String? checkOutTime;
+  // final String? checkInTime;
+  // final String? checkOutTime;
+  final DateTime? checkInTime;
+  final DateTime? checkOutTime;
+
   final int? occupancy;
   final String? doorAccessCode;
   final DateTime? bookingDate;
@@ -111,6 +116,17 @@ class Order {
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
+    DateTime? parseTime(String? ts) {
+      if (ts == null) return null;
+      // Normalize semicolons, if any:
+      final clean = ts.replaceAll(';', ':');
+      try {
+        // This will create a DateTime on 1970-01-01 at that time:
+        return DateFormat('HH:mm').parse(clean);
+      } catch (_) {
+        return null;
+      }
+    }
     return Order(
       id: json['id'],
       orderNumber: json['order_number'] ?? '',
@@ -127,8 +143,16 @@ class Order {
       sofaBeds: json['sofa_beds'],
       withLinen: (json['with_linen'] as int?) == 1,
       withSupplies: (json['with_supplies'] as int?) == 1,
-      checkInTime: json['check_in_time'],
-      checkOutTime: json['check_out_time'],
+      // checkInTime: json['check_in_time'],
+      // checkOutTime: json['check_out_time'],
+      // checkInTime: json['check_in_time'] != null
+      //     ? DateTime.parse(json['check_in_time'] as String)
+      //     : null,
+      // checkOutTime: json['check_out_time'] != null
+      //     ? DateTime.parse(json['check_out_time'] as String)
+      //     : null,
+      checkInTime: parseTime(json['check_in_time'] as String?),
+      checkOutTime: parseTime(json['check_out_time'] as String?),
       occupancy: json['occupancy'],
       doorAccessCode: json['door_access_code'],
       bookingDate: json['booking_date'] != null
