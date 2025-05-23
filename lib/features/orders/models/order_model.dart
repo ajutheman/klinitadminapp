@@ -59,6 +59,12 @@ class Order {
   final List<OrderItem> orderItems;
 
   final List<WorkAssignment> workAssignments;
+  final String? typeOfCleaning;
+  final String? nextGuestCheckInTime;
+  final String? wifiAccessCode;
+  final String? referralAdCode;
+  final int? referralAdBonusCoins;
+
 
   Order({
     required this.id,
@@ -113,6 +119,8 @@ class Order {
     this.address,
     required this.orderItems,
     required this.workAssignments,
+    this.typeOfCleaning,this.nextGuestCheckInTime,this.wifiAccessCode,this.referralAdCode,
+    this.referralAdBonusCoins,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -195,6 +203,9 @@ class Order {
       // createdAt: json['created_at'] != null
       //     ? DateTime.tryParse(json['created_at'])
       //     : null,
+      typeOfCleaning: json['type_of_cleaning'],
+      nextGuestCheckInTime: json['next_guest_check_in_time'],
+      wifiAccessCode: json['wifi_access_code'],
       customer:
           json['customer'] != null ? Customer.fromJson(json['customer']) : null,
       address:

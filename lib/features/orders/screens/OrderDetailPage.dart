@@ -967,7 +967,48 @@ class OrderDetailPage extends StatelessWidget {
           ],
         ),
       ),
+      if ((order.notes ?? '').isNotEmpty)
+        _animatedCard(
+          _section(
+            context,
+            title: 'Notes',
+            children: [
+              Text(order.notes!,
+                  style: theme.textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic)),
+            ],
+          ),
+        ),
+      _animatedCard(
+        _section(
+          context,
+          title: 'Time & Date',
+          children: [
+            _infoRow(
+              theme,
+              Icons.access_time,
+              'Check‑in: ${order.checkInTime != null ? DateFormat.jm().format(order.checkInTime! as DateTime) : '-'}',
+            ),
+            _infoRow(
+              theme,
+              Icons.access_time_outlined,
+              'Check‑out: ${order.checkOutTime != null ? DateFormat.jm().format(order.checkOutTime! as DateTime) : '-'}',
+            ),
+            _infoRow(
+              theme, Icons.access_time,
+              'Check-in: ${order.checkInTime != null
+                  ? DateFormat.jm().format(order.checkInTime!)
+                  : '-'}',
+            ),
 
+            if (order.bookingDate != null)
+              _infoRow(
+                theme,
+                Icons.book_online,
+                'Booking Date: ${DateFormat.yMMMd().format(order.bookingDate!)}',
+              ),
+          ],
+        ),
+      ),
       _animatedCard(
         _section(
           context,
@@ -1037,96 +1078,6 @@ class OrderDetailPage extends StatelessWidget {
           ],
         ),
       ),
-
-      _animatedCard(
-        _section(
-          context,
-          title: 'Preferences',
-          children: [
-            _infoRow(theme, Icons.bedroom_parent_outlined, 'Bedrooms: ${order.bedrooms ?? '-'}'),
-            _infoRow(theme, Icons.pets, 'Pets Present: ${order.petsPresent ? 'Yes' : 'No'}'),
-            _infoRow(theme, Icons.bed, 'Beds: ${order.beds ?? '-'}'),
-            _infoRow(theme, Icons.weekend, 'Sofa Beds: ${order.sofaBeds ?? '-'}'),
-            _infoRow(theme, Icons.label_outline_sharp,
-                'With Linen: ${order.withLinen == 1 ? 'Yes' : 'No'}'),
-            _infoRow(theme, Icons.shopping_bag,
-                'With Supplies: ${order.withSupplies == 1 ? 'Yes' : 'No'}'),
-            _infoRow(theme, Icons.door_front_door,
-                'Door Access: ${order.doorAccessCode ?? '-'}'),
-            _infoRow(theme, Icons.people, 'Occupancy: ${order.occupancy ?? '-'}'),
-          ],
-        ),
-      ),
-
-      _animatedCard(
-        _section(
-          context,
-          title: 'Time & Date',
-          children: [
-            _infoRow(
-              theme,
-              Icons.access_time,
-              'Check‑in: ${order.checkInTime != null ? DateFormat.jm().format(order.checkInTime! as DateTime) : '-'}',
-            ),
-            _infoRow(
-              theme,
-              Icons.access_time_outlined,
-              'Check‑out: ${order.checkOutTime != null ? DateFormat.jm().format(order.checkOutTime! as DateTime) : '-'}',
-            ),
-            _infoRow(
-              theme, Icons.access_time,
-              'Check-in: ${order.checkInTime != null
-                  ? DateFormat.jm().format(order.checkInTime!)
-                  : '-'}',
-            ),
-
-            if (order.bookingDate != null)
-              _infoRow(
-                theme,
-                Icons.book_online,
-                'Booking Date: ${DateFormat.yMMMd().format(order.bookingDate!)}',
-              ),
-          ],
-        ),
-      ),
-
-      _animatedCard(
-        _section(
-          context,
-          title: 'Coupon & Referral',
-          children: [
-            _infoRow(theme, Icons.local_offer, 'Coupon Code: ${order.couponCode ?? '-'}'),
-            _infoRow(theme, Icons.money_off,
-                'Coupon Discount: AED ${order.couponDiscount.toStringAsFixed(2)}'),
-            _infoRow(theme, Icons.redeem, 'Referral Code: ${order.referralCode ?? '-'}'),
-            _infoRow(theme, Icons.stars, 'Referral Bonus: ${order.referralBonusCoins} coins'),
-          ],
-        ),
-      ),
-
-      _animatedCard(
-        _section(
-          context,
-          title: 'Order Meta',
-          children: [
-            _infoRow(theme, Icons.home_work, 'Customer Addr ID: ${order.customerAddressId}'),
-            _infoRow(theme, Icons.schedule, 'Schedule ID: ${order.scheduledTimeId}'),
-          ],
-        ),
-      ),
-
-      if ((order.notes ?? '').isNotEmpty)
-        _animatedCard(
-          _section(
-            context,
-            title: 'Notes',
-            children: [
-              Text(order.notes!,
-                  style: theme.textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic)),
-            ],
-          ),
-        ),
-
       if (order.orderItems.isNotEmpty)
         _animatedCard(
           _section(
@@ -1154,9 +1105,7 @@ class OrderDetailPage extends StatelessWidget {
               );
             }).toList(),
           ),
-        ),
-
-      _animatedCard(
+        ), _animatedCard(
         _section(
           context,
           title: 'Assigned Employees',
@@ -1183,6 +1132,87 @@ class OrderDetailPage extends StatelessWidget {
           }).toList(),
         ),
       ),
+      _animatedCard(
+        _section(
+          context,
+          title: 'Preferences',
+          children: [
+            _infoRow(theme, Icons.bedroom_parent_outlined, 'Bedrooms: ${order.bedrooms ?? '-'}'),
+            _infoRow(theme, Icons.pets, 'Pets Present: ${order.petsPresent ? 'Yes' : 'No'}'),
+            _infoRow(theme, Icons.bed, 'Beds: ${order.beds ?? '-'}'),
+            _infoRow(theme, Icons.weekend, 'Sofa Beds: ${order.sofaBeds ?? '-'}'),
+            _infoRow(theme, Icons.label_outline_sharp,
+                'With Linen: ${order.withLinen == 1 ? 'Yes' : 'No'}'),
+            _infoRow(theme, Icons.shopping_bag,
+                'With Supplies: ${order.withSupplies == 1 ? 'Yes' : 'No'}'),
+            _infoRow(theme, Icons.door_front_door,
+                'Door Access: ${order.doorAccessCode ?? '-'}'),
+            _infoRow(theme, Icons.people, 'Occupancy: ${order.occupancy ?? '-'}'),   _infoRow(theme, Icons.cleaning_services, 'Type: ${order.typeOfCleaning}'),
+            _infoRow(theme, Icons.timer_outlined, 'Next Guest Check-In: ${order.nextGuestCheckInTime}'),
+            _infoRow(theme, Icons.wifi, 'WiFi Code: ${order.wifiAccessCode}'),
+
+          ],
+        ),
+      ),
+
+
+
+      _animatedCard(
+        _section(
+          context,
+          title: 'Coupon & Referral',
+          children: [
+            _infoRow(theme, Icons.local_offer, 'Coupon Code: ${order.couponCode ?? '-'}'),
+            _infoRow(theme, Icons.money_off,
+                'Coupon Discount: AED ${order.couponDiscount.toStringAsFixed(2)}'),
+            _infoRow(theme, Icons.redeem, 'Referral Code: ${order.referralCode ?? '-'}'),
+            _infoRow(theme, Icons.stars, 'Referral Bonus: ${order.referralBonusCoins} coins'),
+          ],
+        ),
+      ),
+      // _animatedCard(
+      //   _section(
+      //     context,
+      //     title: 'Stripe Metadata',
+      //     children: [
+      //       _infoRow(theme, Icons.confirmation_number_outlined, 'Order Number: ${order.stripeMetadata?["order_number"] ?? '-'}'),
+      //       _infoRow(theme, Icons.receipt_long, 'Stripe Order ID: ${order.stripeMetadata?["order_id"] ?? '-'}'),
+      //       _infoRow(theme, Icons.person_outline, 'Stripe Customer ID: ${order.stripeMetadata?["customer_id"] ?? '-'}'),
+      //     ],
+      //   ),
+      // ),
+
+      _animatedCard(
+        _section(
+          context,
+          title: 'Order Meta',
+          children: [
+            _infoRow(theme, Icons.home_work, 'Customer Addr ID: ${order.customerAddressId}'),
+            _infoRow(theme, Icons.schedule, 'Schedule ID: ${order.scheduledTimeId}'),
+          ],
+        ),
+      ),
+    _animatedCard(
+    _section(
+    context,
+    title: 'System Metadata',
+    children: [
+    // _infoRow(theme, Icons.fingerprint, 'Encrypted ID: ${order.encryptedId}'),
+    if (order.createdAt != null)
+    _infoRow(theme, Icons.schedule, 'Created: ${DateFormat.yMMMd().add_jm().format(order.createdAt!)}'),
+    if (order.updatedAt != null)
+    _infoRow(theme, Icons.update, 'Updated: ${DateFormat.yMMMd().add_jm().format(order.updatedAt!)}'),
+    if ((order.deletedAt ?? '').isNotEmpty)
+    _infoRow(theme, Icons.delete_forever, 'Deleted At: ${order.deletedAt}'),
+    ],
+    ),
+    ),
+
+
+
+
+
+
     ];
 
     return Scaffold(
