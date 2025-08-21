@@ -26,7 +26,7 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
 
     on<AssignEmployees>((event, emit) async {
       try {
-        await repository.assignEmployees(event.orderId, event.employeeIds);
+        await repository. assignEmployees(event.orderId, event.employeeIds);
         emit(EmployeeAssigned());
       } catch (e) {
         emit(EmployeeError("Assignment Failed: ${e.toString()}"));

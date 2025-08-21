@@ -95,9 +95,11 @@ class SubscriptionScheduleRepository {
   //   return data.map((e) => SubscriptionSchedule.fromJson(e)).toList();
   // }
   Future<List<SubscriptionSchedule>> getSchedules(String date) async {
+    final url = '/api/admin/subscription-schedules/daily?date=$date';
+    print("📤 GET $url");
     final res =
         await api.get('/api/admin/subscription-schedules/daily?date=$date');
-
+    print("📥 Response: ${res.data}");
     // // Make sure you're using `.data`
     // final responseData = res.data;
     //
@@ -116,7 +118,10 @@ class SubscriptionScheduleRepository {
   }
 
   Future<List<Employee>> getEmployees() async {
+    const url = '/api/admin/orders/list';
+    print("📤 GET $url");
     final res = await api.get('/api/admin/orders/list');
+    print("📥 Response: ${res.data}");
     final data = res.data['data'] as List;
     return data.map((e) => Employee.fromJson(e)).toList();
   }
@@ -129,6 +134,8 @@ class SubscriptionScheduleRepository {
   }) async {
     // await api
     // .postFormData('/api/admin/subscription-schedules/assign-employee',
+    const url = '/api/admin/subscription-schedules/assign-employee';
+
     final response = await api
         .postJson('/api/admin/subscription-schedules/assign-employee', {
       'schedule_id': scheduleId,
@@ -136,6 +143,9 @@ class SubscriptionScheduleRepository {
       'work_date': date,
       'day_of_week': day,
     });
+    print("📤 POST $url\n📦 Payload scheduleId: $scheduleId employeeId: $employeeId date: $date day: $day");
+    print("📥 Response: $response");
+
     if (response['success'] != true) {
       throw Exception('Failed to assign employee: ${response['message']}');
     }
@@ -148,8 +158,12 @@ class SubscriptionScheduleRepository {
 
   Future<List<AssignedEmployee>> getAssignedEmployees(
       int scheduleId, String date) async {
+    final url = '/api/admin/subscription-schedules/remove-assignment/$scheduleId';
+    print("📤 GET $url");
+
     final res = await api.get(
         '/api/admin/subscription-schedules/assigned-employees/$scheduleId/$date');
+    print("📥 Response: ${res.data}");
     final data = res.data['data']['assignments'] as List;
     return data.map((e) => AssignedEmployee.fromJson(e)).toList();
   }

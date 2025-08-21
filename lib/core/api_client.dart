@@ -6,7 +6,8 @@ class ApiClient {
   static Dio dio =
       // Dio(BaseOptions(
       //     baseUrl: "https://testcleaning.swayamvarawedding.in/public/api"));
-      Dio(BaseOptions(baseUrl: "https://kleanit.planetprouae.com/api"));
+      // Dio(BaseOptions(baseUrl: "https://kleanit.planetprouae.com/api"));
+      Dio(BaseOptions(baseUrl: "https://backend.kleanit.ae/api"));
 
   static Future<Response> postForm(String path, Map<String, dynamic> data) {
     return dio.post(path, data: FormData.fromMap(data));

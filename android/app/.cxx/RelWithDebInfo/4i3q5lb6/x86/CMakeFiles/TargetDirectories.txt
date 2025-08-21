@@ -1,0 +1,2 @@
+/Users/ajmal/StudioProjects/klinitadminapp/android/app/.cxx/RelWithDebInfo/4i3q5lb6/x86/CMakeFiles/edit_cache.dir
+/Users/ajmal/StudioProjects/klinitadminapp/android/app/.cxx/RelWithDebInfo/4i3q5lb6/x86/CMakeFiles/rebuild_cache.dir

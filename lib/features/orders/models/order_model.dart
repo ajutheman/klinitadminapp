@@ -17,6 +17,7 @@ class Order {
   final int referralBonusCoins;
   final int? customerAddressId;
   final int scheduledTimeId;
+  final String? scheduledTime;
   final int? bedrooms;
   final bool petsPresent;
   final int? beds;
@@ -87,6 +88,7 @@ class Order {
     this.occupancy,
     this.doorAccessCode,
     this.bookingDate,
+    this.scheduledTime,
     required this.subtotal,
     required this.taxRate,
     required this.taxAmount,
@@ -145,6 +147,10 @@ class Order {
       referralBonusCoins: json['referral_bonus_coins'] ?? 0,
       customerAddressId: json['customer_address_id'],
       scheduledTimeId: json['scheduled_time_id'] ?? 0,
+
+      scheduledTime: json['schedule_time'] ?? json['scheduled_time'], // ✅ Fallback handled
+
+
       bedrooms: json['bedrooms'],
       petsPresent: (json['pets_present'] as int?) == 1,
       beds: json['beds'],

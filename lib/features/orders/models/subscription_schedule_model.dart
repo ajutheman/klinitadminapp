@@ -2,6 +2,7 @@ class SubscriptionSchedule {
   final int scheduleId;
   final String date;
   final String dayOfWeek;
+  final String scheduleTime; // ✅ New field
   final CustomerInfo customer;
   final OrderInfo order;
   final CategoryInfo category;
@@ -11,6 +12,8 @@ class SubscriptionSchedule {
     required this.scheduleId,
     required this.date,
     required this.dayOfWeek,
+    required this.scheduleTime, // ✅ include in constructor
+
     required this.customer,
     required this.order,
     required this.category,
@@ -46,6 +49,7 @@ class SubscriptionSchedule {
       scheduleId: json['schedule_id'] ?? 0,
       date: json['date'] ?? '',
       dayOfWeek: json['day_of_week'] ?? '',
+      scheduleTime: json['schedule_time'] ?? '', // ✅ parse from JSON
       customer: CustomerInfo.fromJson(json['customer'] ?? {}),
       order: OrderInfo.fromJson(json['order'] ?? {}),
       category: CategoryInfo.fromJson(json['category'] ?? {}),
@@ -78,7 +82,8 @@ class OrderInfo {
 class CustomerInfo {
   final String name;
   final String phone;
-  final String address;
+  final AddressInfo address;
+  // final String address;
 
   CustomerInfo({
     required this.name,
@@ -89,10 +94,40 @@ class CustomerInfo {
   factory CustomerInfo.fromJson(Map<String, dynamic> json) => CustomerInfo(
         name: json['name'] ?? 'N/A',
         phone: json['phone'] ?? 'N/A',
-        address: json['address'] ?? 'N/A',
+        // address: json['address'] ?? 'N/A',
+    address: AddressInfo.fromJson(json['address'] ?? {}),
       );
 }
+class AddressInfo {
+  final String buildingName;
+  final String flatNumber;
+  final String floorNumber;
+  final String streetName;
+  final String area;
+  final String emirate;
 
+  AddressInfo({
+    required this.buildingName,
+    required this.flatNumber,
+    required this.floorNumber,
+    required this.streetName,
+    required this.area,
+    required this.emirate,
+  });
+
+  factory AddressInfo.fromJson(Map<String, dynamic> json) => AddressInfo(
+    buildingName: json['building_name'] ?? '',
+    flatNumber: json['flat_number'] ?? '',
+    floorNumber: json['floor_number'] ?? '',
+    streetName: json['street_name'] ?? '',
+    area: json['area'] ?? '',
+    emirate: json['emirate'] ?? '',
+  );
+
+  @override
+  String toString() {
+    return '$flatNumber, $buildingName, $floorNumber, $streetName, $area, $emirate';
+  }}
 class CategoryInfo {
   final String name;
   final String description;

@@ -33,7 +33,8 @@ class ApiService {
   final Dio dio = Dio();
 
   ApiService() {
-    dio.options.baseUrl = 'https://kleanit.planetprouae.com';
+    // dio.options.baseUrl = 'https://kleanit.planetprouae.com';
+    dio.options.baseUrl = 'https://backend.kleanit.ae';
     // dio.options.baseUrl = 'https://testcleaning.swayamvarawedding.in/public';
     dio.interceptors.add(
       InterceptorsWrapper(

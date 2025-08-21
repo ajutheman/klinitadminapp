@@ -466,12 +466,18 @@ class _SubscriptionSchedulesPageState extends State<SubscriptionSchedulesPage>
                                 const SizedBox(height: 8),
 
                                 // date & time
-                                _infoLine(
-                                  theme,
-                                  icon: Icons.schedule,
-                                  label:
-                                  "Time: ${DateFormat('hh:mm a').format(DateTime.parse(schedule.date))}",
-                                ),
+                                // _infoLine(
+                                //   theme,
+                                //   icon: Icons.schedule,
+                                //   label:
+                                //   "Time: ${DateFormat('hh:mm a').format(DateTime.parse(schedule.date))}",
+                                // ),
+                                // _infoLine(
+                                //   theme,
+                                //   icon: Icons.schedule,
+                                //   label: "Time: ${DateFormat('hh:mm a').format(DateTime.parse(schedule.date).toLocal())}",
+                                // ),
+
                                 _infoLine(theme, icon: Icons.date_range, label: "Date: ${schedule.date}"),
                                 const Divider(),
 
@@ -482,7 +488,7 @@ class _SubscriptionSchedulesPageState extends State<SubscriptionSchedulesPage>
                                 _infoLine(theme,
                                     icon: Icons.phone, label: schedule.customer.phone),
                                 _infoLine(theme,
-                                    icon: Icons.home, label: schedule.customer.address),
+                                    icon: Icons.home, label: schedule.customer.address.toString()),
                                 const Divider(),
 
                                 // category
@@ -508,6 +514,9 @@ class _SubscriptionSchedulesPageState extends State<SubscriptionSchedulesPage>
                                 _infoLine(theme,
                                     icon: Icons.confirmation_num,
                                     label: "Sched ID: ${schedule.scheduleId}"),
+                                // const Divider(),
+                                _infoLine(theme, icon: Icons.schedule, label: "Time: ${schedule.scheduleTime}"),
+
                                 const Divider(),
 
                                 // assigned employees
@@ -525,13 +534,16 @@ class _SubscriptionSchedulesPageState extends State<SubscriptionSchedulesPage>
                                         '${e.name} (${e.status})',
                                         style: theme.textTheme.bodyMedium,
                                       ),
-                                      deleteIcon: Icon(Icons.cancel, size: 18, color: theme.colorScheme.error),
-                                      onDeleted: () {
-                                        _bloc.add(RemoveScheduleEmployee(
-                                          assignmentId: e.id,
-                                          date: schedule.date,
-                                        ));
-                                      },
+                                      ///deete funtion re work
+                                      ///
+                                      // deleteIcon: Icon(Icons.cancel, size: 18, color: theme.colorScheme.error),
+                                      // onDeleted: () {
+                                      //   _bloc.add(RemoveScheduleEmployee(
+                                      //     assignmentId: e.id,
+                                      //     date: schedule.date,
+                                      //   )
+                                      //   );
+                                      // },
                                     );
                                   }).toList(),
                                 ),

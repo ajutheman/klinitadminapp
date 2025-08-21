@@ -282,9 +282,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController =
-  TextEditingController(text: 'test@example.com');
+  TextEditingController(text: '');
   final _passwordController =
-  TextEditingController(text: 'password');
+  TextEditingController(text: '');
   bool _obscure = true;
 
   @override
@@ -293,6 +293,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: theme.scaffoldBackgroundColor,
       body: BlocProvider(
         create: (_) =>

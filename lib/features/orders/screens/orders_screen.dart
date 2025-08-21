@@ -1701,10 +1701,44 @@ class _OrdersPageState extends State<OrdersPage> {
                     const SizedBox(height: 8),
 
                     // Metadata
-                    _infoRow(theme, Icons.date_range,
-                        DateFormat.yMMMd().add_jm().format(order.createdAt!)),
-                    _infoRow(theme, Icons.event,
-                        "Scheduled: ${order.scheduledTimeId}"),
+                    // _infoRow(theme, Icons.date_range,
+                    //     DateFormat.yMMMd().add_jm().format(order.createdAt!)),
+                    // _infoRow(
+                    //   theme,
+                    //   Icons.event,
+                    //   "Scheduled: ${formatDateTime(parseUtcToLocal(order.scheduledTime))}",
+                    // ),
+                    _infoRow(
+                      theme,
+                      Icons.event,
+                      "Created time: ${DateFormat.yMMMd().add_jm().format(order.createdAt!.toLocal())}",
+                    ),
+
+                    _infoRow(
+                      theme,
+                      Icons.book_online,
+                      'Booked Date: ${DateFormat.yMMMd().format(order.bookingDate!)}',
+                    ),
+                    // _infoRow(
+                    //   theme,
+                    //   Icons.book_online,
+                    //   'Booking created Date: ${DateFormat.yMMMd().format(order.createdAt!)}',
+                    // ),
+
+                    // _infoRow(theme, Icons.event,
+                    //     "Scheduled id : ${order.scheduledTimeId}"),
+                  _infoRow(
+                    theme,
+                    Icons.access_time,
+                    "Scheduled time: ${order.scheduledTime ?? 'N/A'}",
+                  ),
+
+
+
+
+
+                  // _infoRow(theme, Icons.event,
+                    //     "Scheduled: ${order.scheduledTimeId}"),
                     _infoRow(theme, Icons.attach_money,
                         "Total: AED ${order.total.toStringAsFixed(2)}"),
 
@@ -1793,8 +1827,8 @@ class _OrdersPageState extends State<OrdersPage> {
                                   if (context.mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                          content: Text(
-                                              "Employees assigned successfully")),
+                                          content: Text(style: TextStyle(color: Colors.white),
+                                              "Employees assigned successfully ")),
                                     );
                                   }
                                 },
@@ -1915,6 +1949,16 @@ class _OrdersPageState extends State<OrdersPage> {
     _employeeBloc.close();
     super.dispose();
   }
+
+  String formatDateTime(DateTime dateTime) {
+    // Example: "Jul 7, 2025 04:00 PM"
+    return DateFormat.yMMMd().add_jm().format(dateTime);
+  }
+
+  DateTime parseUtcToLocal(String utcString) {
+    return DateTime.parse(utcString).toLocal();
+  }
+
 }
 
 Color _statusColor(String status) {
